@@ -36,15 +36,15 @@ jobs:
           go-version: '1.21'
 
       - name: Build with Make
+        run: |
+          make clean
+          make tidy
+          make build-cross
         env:
           GOOS: ${{ matrix.GOOS }}
           GOARCH: ${{ matrix.GOARCH }}
           GOARM: ${{ matrix.GOARM }}
-        run: |
-          make clean
-          make tidy
-          mkdir -p dist
-          go build -o dist/quickflare-go-${{ matrix.name }} main.go
+          NAME: ${{ matrix.name }}
 
       - name: Create or Update Latest Release
         uses: softprops/action-gh-release@v2
