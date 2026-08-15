@@ -10,7 +10,6 @@ quickflare-go
 cloudflared-windows-*
 cloudflared-linux-*
 cloudflared-darwin-*
-cloudflared
 
 # Go cache
 /vendor/
