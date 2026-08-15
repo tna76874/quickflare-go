@@ -1,0 +1,16 @@
+# Binaries
+quickflare-go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Cloudflared binärdateien im Arbeitsverzeichnis (falls lokal abgelegt)
+cloudflared-windows-*
+cloudflared-linux-*
+cloudflared-darwin-*
+cloudflared
+
+# Go cache
+/vendor/

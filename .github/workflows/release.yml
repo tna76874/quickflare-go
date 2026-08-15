@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - GOOS: linux
+            GOARCH: amd64
+            name: linux-amd64
+          - GOOS: linux
+            GOARCH: arm64
+            name: linux-arm64
+          - GOOS: linux
+            GOARCH: arm
+            GOARM: 7
+            name: linux-armv7
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Build with Make
+        env:
+          GOOS: ${{ matrix.GOOS }}
+          GOARCH: ${{ matrix.GOARCH }}
+          GOARM: ${{ matrix.GOARM }}
+        run: |
+          make clean
+          make tidy
+          mkdir -p dist
+          go build -o dist/quickflare-go-${{ matrix.name }} main.go
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/quickflare-go-*
+          tag_name: latest
+          overwrite: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
